@@ -1,0 +1,88 @@
+### 🧪 `troubleshooting.md`: RAG Chatbot Error Log & Fixes
+
+```markdown
+# 🐛 Troubleshooting Log: RAG Chatbot Lab
+
+This document captures the errors encountered while building the Retrieval-Augmented Generation (RAG) chatbot using LangChain, Oracle AI Vector Search, and fallback logic. Each issue includes context, root cause, resolution, and lessons learned.
+
+---
+
+## ❌ Error: `ImportError: cannot import name 'RetrievalQA'`
+**Context**: LangChain import failed during chain setup  
+**Root Cause**: LangChain module structure changed in v0.1+  
+**Resolution**:
+```python
+# Old (broken)
+from langchain.chains.question_answering import RetrievalQA
+
+# Fixed
+from langchain.chains import RetrievalQA
+```
+**Lesson**: LangChain evolves rapidly—always check version-specific docs and changelogs.
+
+---
+
+## ❌ Error: `ValueError: No documents returned from retriever`
+**Context**: Query returned no results from vector store  
+**Root Cause**: Poor document chunking or missing embeddings  
+**Resolution**:
+- Verified document loading and chunking logic
+- Added fallback response using `handle_empty_retrieval(query)`
+- Improved chunk size and overlap for better semantic matching
+
+**Lesson**: Retrieval failures are common—fallback logic is essential for reliability.
+
+---
+
+## ❌ Error: `AttributeError: 'NoneType' object has no attribute 'page_content'`
+**Context**: Chain crashed when retriever returned `None`  
+**Root Cause**: No documents matched query; no null check in pipeline  
+**Resolution**:
+```python
+if retrieved_docs:
+    # proceed
+else:
+    # trigger fallback
+```
+**Lesson**: Always validate retriever output before passing to LLM.
+
+---
+
+## ❌ Error: `TokenLimitExceeded`
+**Context**: Long input caused model to exceed token limits  
+**Root Cause**: Large document chunks or verbose queries  
+**Resolution**:
+- Added chunking logic with `CharacterTextSplitter`
+- Used `tiktoken` to estimate token count
+- Triggered `handle_token_overflow()` when needed
+
+**Lesson**: Token management is critical—especially with long-context RAG.
+
+---
+
+## ❌ Error: `ModuleNotFoundError: No module named 'langchain.vectorstores.oracle'`
+**Context**: Tried to use Oracle plugin for vector search  
+**Root Cause**: Plugin not installed or not supported in current LangChain version  
+**Resolution**:
+- Fallback to FAISS for local dev
+- Documented Oracle plugin setup steps separately
+
+**Lesson**: Always test with local vector store before scaling to cloud-native plugins.
+
+---
+
+## ✅ Bonus Fixes & Enhancements
+- Modularized retriever setup in `retriever_config.py`
+- Centralized fallback logic in `fallback_logic.py`
+- Added Streamlit UI for interactive testing
+- Created `requirements.txt` for reproducibility
+
+---
+
+## 🧠 Final Takeaways
+- Every error is a lab opportunity—document it, fix it, teach it
+- Fallback logic isn’t optional—it’s a feature
+- Modular design makes debugging and scaling easier
+
+
+Want to build a `README.md` badge section next or scaffold a `Streamlit` UI walkthrough? We can keep turning this lab into a portfolio centerpiece. Just say the word.
