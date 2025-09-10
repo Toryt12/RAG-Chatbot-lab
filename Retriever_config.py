@@ -31,3 +31,11 @@ def get_retriever(doc_path="data/sample_docs/context.txt", k=3):
     except Exception as e:
         print(f"[Retriever Config] Failed to initialize retriever: {e}")
         return None
+
+🧪 How to Use It in app.py
+Replace your inline retriever logic with:
+from retriever_config import get_retriever
+
+retriever = get_retriever()
+if retriever:
+    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)
