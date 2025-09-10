@@ -1,0 +1,29 @@
+# 🔗 LangChain core framework
+langchain>=0.1.0
+
+# 🧠 OpenAI LLM and embeddings
+openai>=1.0.0
+
+# 📚 Vector store for local dev (swap with Oracle plugin if needed)
+faiss-cpu>=1.7.4
+
+# 🧠 Embedding support
+tiktoken>=0.5.1
+
+# 📄 Document loading and splitting
+unstructured>=0.10.0
+chromadb>=0.4.14  # Optional alternative to FAISS
+pypdf>=3.9.1      # For PDF support if needed
+
+# 🖼️ Streamlit UI
+streamlit>=1.28.0
+
+# 🛠️ Environment variable support
+python-dotenv>=1.0.0
+
+# 🐍 Core Python utilities
+numpy>=1.24.0
+pandas>=2.0.0
+
+# 🧪 Optional: Oracle Vector Search SDK (if available)
+# oracle-vectorstore-sdk>=0.1.0  ← Uncomment if using Oracle plugin
